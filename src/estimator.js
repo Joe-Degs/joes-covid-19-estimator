@@ -1,15 +1,13 @@
-function duration(periodType, timeToElapse) {
-  if (periodType === 'months') {
-    const monthsToDays = timeToElapse * 30;
-    return Math.floor(monthsToDays / 3);
-  }
-  if (periodType === 'weeks') {
-    const weeksToDays = timeToElapse * 7;
-    return Math.floor(weeksToDays / 3);
-  }
-
-  return Math.floor(timeToElapse / 3);
+const duration = (periodType, timeToElapse) => {
+	const toDays = {
+		days: timeToElapse,
+		months: timeToElapse * 30,
+		weeks: timeToElapse * 7
+	}
+	return Math.trunc(toDays[periodType] / 3)
 }
+
+const percentage = (percent, number) => Math.trunc((percent / 100) * number);
 
 const covid19ImpactEstimator = (data) => {
   const estimate = {
@@ -24,7 +22,12 @@ const covid19ImpactEstimator = (data) => {
 
   Object.keys(estimate).slice(1, 3).forEach((key) => {
     estimate[key].infectionsByRequestedTime = estimate[key].currentlyInfected
-    * (2 ** duration(data.periodType, data.timeToElapse));
+     * (2 ** duration(data.periodType, data.timeToElapse));
+
+    severeCases = percentage(15, estimate[key].infectionsByRequestedTime);
+    requiredBeds = percentage(35, data.totalHospitalBeds);
+    estimate[key].severeCasesByRequestedTime = severeCases;
+    estimate[key].hospitalBedsByRequestedTime = requiredBeds - severeCases; 
   });
 
   return estimate;
