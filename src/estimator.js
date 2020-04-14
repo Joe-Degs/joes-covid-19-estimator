@@ -21,7 +21,7 @@ const covid19ImpactEstimator = (data) => {
   };
 
   Object.keys(estimate).slice(1, 3).forEach((key) => {
-  	const daysElapsed = duration(data.periodType, data.timeToElapse);
+    const daysElapsed = duration(data.periodType, data.timeToElapse);
     estimate[key].infectionsByRequestedTime = estimate[key].currentlyInfected
      * (2 ** daysElapsed[1]);
 
@@ -35,8 +35,8 @@ const covid19ImpactEstimator = (data) => {
     const ventilators = percentage(2, estimate[key].infectionsByRequestedTime);
     estimate[key].casesForICUByRequestedTime = Math.trunc(icu);
     estimate[key].casesForVentilatorsByRequestedTime = Math.trunc(ventilators);
-    const avgIncome = (estimate[key].infectionsByRequestedTime *
-     data.region.avgDailyIncomeInPopulation * data.region.avgDailyIncomeInUSD) / daysElapsed[0];
+    const avgIncome = (estimate[key].infectionsByRequestedTime
+     * data.region.avgDailyIncomeInPopulation * data.region.avgDailyIncomeInUSD) / daysElapsed[0];
     estimate[key].dollarsInFlight = Math.trunc(avgIncome);
   });
 
