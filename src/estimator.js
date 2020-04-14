@@ -28,6 +28,14 @@ const covid19ImpactEstimator = (data) => {
     const requiredBeds = percentage(35, data.totalHospitalBeds);
     estimate[key].severeCasesByRequestedTime = Math.trunc(severeCases);
     estimate[key].hospitalBedsByRequestedTime = Math.trunc(requiredBeds - severeCases);
+
+    // challenge 3
+    const icu = percentage(5, estimate[key].infectionsByRequestedTime);
+    const ventilators = percentage(2, estimate[key].infectionsByRequestedTime);
+    estimate[key].casesForICUByRequestedTime = Math.trunc(icu);
+    estimate[key].casesForVentilatorsByRequestedTime = Math.trunc(ventilators);
+    const avgIncome = (estimate[key].infectionsByRequestedTime * 0.65 * 1.5) / 30;
+    estimate[key].dollarsInFlight = Math.trunc(avgIncome);
   });
 
   return estimate;
