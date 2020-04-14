@@ -2,6 +2,7 @@ const app = require('express')();
 const covid19 = require('./routes');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const PORT = process.env.PORT || 8080;
 const fs = require('fs');
@@ -23,6 +24,11 @@ app.use(morgan(':method\t\t:url\t\t:status\t\t0:total-time[0]ms', {
   stream: fs.createWriteStream(logFile, { flags: 'a' })
 }));
 
+app.use(cors({
+	credentials: true,
+	origin: true
+}));
+app.options('*', cors());
 app.use('/api/v1/on-covid-19/', covid19);
 
 app.use((req, res, next) => {
