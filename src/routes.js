@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const estimator = require('./estimator');
 const toXML = require('xml-js').js2xml;
 const fs = require('fs');
 const logFile = require('path').join(__dirname, 'logfile');
+const estimator = require('./estimator');
 
 router.post('/', (req, res) => {
   const result = estimator(req.body);

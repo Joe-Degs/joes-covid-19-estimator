@@ -1,5 +1,4 @@
 const app = require('express')();
-const covid19 = require('./routes');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -7,6 +6,7 @@ const cors = require('cors');
 const PORT = process.env.PORT || 8080;
 const fs = require('fs');
 const logFile = require('path').join(__dirname, 'logfile');
+const covid19 = require('./routes');
 
 morgan.token('response-time', () => {
   const start = new Date();
@@ -25,8 +25,8 @@ app.use(morgan(':method\t\t:url\t\t:status\t\t0:total-time[0]ms', {
 }));
 
 app.use(cors({
-	credentials: true,
-	origin: true
+  credentials: true,
+  origin: true
 }));
 app.options('*', cors());
 app.use('/api/v1/on-covid-19/', covid19);
