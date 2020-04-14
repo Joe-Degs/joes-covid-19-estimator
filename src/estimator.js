@@ -22,9 +22,10 @@ const covid19ImpactEstimator = (data) => {
     }
   };
 
-  for (const key of Object.keys(estimate).slice(1, 3)) {
-    estimate[key].infectionsByRequestedTime = estimate[key].currentlyInfected * (2 ** duration(data.periodType, data.timeToElapse));
-  }
+  Object.keys(estimate).slice(1, 3).forEach((key) => {
+    estimate[key].infectionsByRequestedTime = estimate[key].currentlyInfected
+    * (2 ** duration(data.periodType, data.timeToElapse));
+  });
 
   return estimate;
 };
