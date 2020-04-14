@@ -1,25 +1,25 @@
 const covid19ImpactEstimator = (data) => {
 
-	let result = {
+	const estimate = {
 		data: data,
 		impact: {
 			currentlyInfected: data.reportedCases * 10,
-			infectionsByRequestedTime: ''
+			infectionsByRequestedTime: 0
 		},
 		severeImpact: {
 			currentlyInfected: data.reportedCases * 50,
-			infectionsByRequestedTime: ''
+			infectionsByRequestedTime: 0
 		}
 	}
 
-	for (prop in result) {
-		if (prop['infectionsByRequestedTime']) {
-			prop['infectionsByRequestedTime'] =
-				prop['currentlyInfected'] * (2 ** duration(data.periodType, data.timeToElapse));
+	for (const key of Object.keys(estimate)) {
+		if ( key === 'impact' || key === 'severeImpact' ) {
+			estimate[key]['infectionsByRequestedTime'] =
+				estimate[key]['currentlyInfected'] * (2 ** duration(data.periodType, data.timeToElapse));
 		}
 	}
 
-	return result;
+	return estimate;
 };
 
 function duration (periodType, timeToElapse) {
