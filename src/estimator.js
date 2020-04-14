@@ -4,7 +4,7 @@ const duration = (periodType, timeToElapse) => {
     months: timeToElapse * 30,
     weeks: timeToElapse * 7
   };
-  return Math.trunc(toDays[periodType] / 3);
+  return [toDays[periodType], Math.trunc(toDays[periodType] / 3)];
 };
 
 const percentage = (percent, number) => (percent / 100) * number;
@@ -21,8 +21,9 @@ const covid19ImpactEstimator = (data) => {
   };
 
   Object.keys(estimate).slice(1, 3).forEach((key) => {
+  	const daysElapsed = duration(data.periodType, data.timeToElapse);
     estimate[key].infectionsByRequestedTime = estimate[key].currentlyInfected
-     * (2 ** duration(data.periodType, data.timeToElapse));
+     * (2 ** daysElapsed[1]);
 
     const severeCases = percentage(15, estimate[key].infectionsByRequestedTime);
     const requiredBeds = percentage(35, data.totalHospitalBeds);
@@ -34,7 +35,8 @@ const covid19ImpactEstimator = (data) => {
     const ventilators = percentage(2, estimate[key].infectionsByRequestedTime);
     estimate[key].casesForICUByRequestedTime = Math.trunc(icu);
     estimate[key].casesForVentilatorsByRequestedTime = Math.trunc(ventilators);
-    const avgIncome = (estimate[key].infectionsByRequestedTime * 0.65 * 1.5) / 30;
+    const avgIncome = (estimate[key].infectionsByRequestedTime *
+     data.region.avgDailyIncomeInPopulation * data.region.avgDailyIncomeInUSD) / daysElapsed[0];
     estimate[key].dollarsInFlight = Math.trunc(avgIncome);
   });
 
