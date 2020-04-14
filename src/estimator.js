@@ -7,7 +7,7 @@ const duration = (periodType, timeToElapse) => {
   return Math.trunc(toDays[periodType] / 3);
 };
 
-const percentage = (percent, number) => Math.trunc((percent / 100) * number);
+const percentage = (percent, number) => (percent / 100) * number;
 
 const covid19ImpactEstimator = (data) => {
   const estimate = {
@@ -26,8 +26,8 @@ const covid19ImpactEstimator = (data) => {
 
     const severeCases = percentage(15, estimate[key].infectionsByRequestedTime);
     const requiredBeds = percentage(35, data.totalHospitalBeds);
-    estimate[key].severeCasesByRequestedTime = severeCases;
-    estimate[key].hospitalBedsByRequestedTime = requiredBeds - severeCases;
+    estimate[key].severeCasesByRequestedTime = Math.trunc(severeCases);
+    estimate[key].hospitalBedsByRequestedTime = Math.trunc(requiredBeds - severeCases);
   });
 
   return estimate;
